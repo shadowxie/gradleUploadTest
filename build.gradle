@@ -1,0 +1,38 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+
+
+repositories {
+    mavenCentral()
+    mavenRepo url: "http://localhost:8080/archiva/snapshots"
+}
+
+
+
+dependencies {
+    groovy 'org.codehaus.groovy:groovy-all:1.8.6'
+    testCompile 'org.spockframework:spock-core:0.6-groovy-1.8'
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+}
+
+
+uploadArchives {
+    uploadDescriptor = false
+    repositories{
+        mavenDeployer {
+            uniqueVersion = false
+            configureAuth = {
+                authentication(userName: 'admin', password: 'mvagustaf4')
+            }
+            //snapshotRepository(url: "http://localhost:8080/archiva/repository/snapshots/", configureAuth)
+            repository(url: "http://localhost:8080/archiva/repository/snapshots/", configureAuth)
+            pom.groupId = "com.hello" 
+            pom.version = '1.0'
+            pom.artifactId = 'hello'
+        
+       }
+    }
+}
